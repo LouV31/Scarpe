@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Scarpe.Models.Scarpa>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Scarpe</h2>
+
+<div class="container">
+
+    <div class="row row-cols-4">
+        @foreach (Scarpe.Models.Scarpa s in Model)
+        {
+            <div class="col">
+                <div class="card">
+                    <img class="card-img-top object-fit-c" src="@s.ImmagineCopertina" alt="@s.NomeScarpa" style="width: 200px; " />
+                    <div class="card-body">
+                        @Html.ActionLink(s.NomeScarpa, "Dettagli", "Home", new { id = s.idScarpa }, new { @class = "card-text mb-0 text-black text-decoration-none" })
+                        <p class="card-text font-monospace">@s.Prezzo</p>
+                    </div>
+                </div>
+            </div>
+            
+        }
+    </div>
+</div>
+
+
+
