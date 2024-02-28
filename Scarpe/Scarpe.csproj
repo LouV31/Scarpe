@@ -121,10 +121,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UtenteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Dettagli.cs" />
+    <Compile Include="Models\DettagliModelView.cs" />
     <Compile Include="Models\ImmagineArticolo.cs" />
     <Compile Include="Models\Scarpa.cs" />
     <Compile Include="Models\Utente.cs" />
@@ -178,10 +179,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Dettagli.cshtml" />
+    <Content Include="Views\Utente\Login.cshtml" />
+    <Content Include="Views\Utente\Admin.cshtml" />
+    <Content Include="Views\Utente\ModificaScarpa.cshtml" />
+    <Content Include="Views\Utente\AggiungiScarpa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

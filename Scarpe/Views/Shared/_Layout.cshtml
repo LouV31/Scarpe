@@ -19,9 +19,25 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Informazioni", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contatto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Login", "Login", "Utente", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (Session["Utente"] != null) {
+                        Scarpe.Models.Utente utente = (Scarpe.Models.Utente)Session["Utente"];
+                        
+                        if (utente.isAdmin) {
+                            <li>@Html.ActionLink("Admin","Admin", "Utente", new {area = ""}, new {@class = "nav-link"})</li>
+                        }
+                    }
                 </ul>
+                    @if (Session["Utente"] != null) {
+                        Scarpe.Models.Utente utente = (Scarpe.Models.Utente)Session["Utente"];
+
+                        string email = utente.Email;
+                        <div class="d-flex flex-column">
+                            <p class="nav-link text-white mb-0">Benvenuto: @email</p>
+                            @Html.ActionLink("Logout", "Logout", "Utente", new { area = "" }, new { @class = "nav-link text-danger" })
+                        </div>
+                    
+                    }
             </div>
         </div>
     </nav>

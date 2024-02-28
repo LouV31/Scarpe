@@ -1,18 +1,36 @@
-﻿@model Scarpe.Models.Scarpa
+﻿@model Scarpe.Models.DettagliModelView
 
+@{
+    ViewBag.Title = "Dettagli";
+}
 
-
-<h2>Dettagli</h2>
+<h2>@Model.Scarpa.NomeScarpa</h2>
 
 <div class="container">
     <div class="row">
-        <div class="col">
-            <img class="card-img-top object-fit-c" src="@Model.ImmagineCopertina" alt="@Model.NomeScarpa" style="width: 200px; " />
+        <div class="col-3">
+            <img src="@Model.Scarpa.ImmagineCopertina" alt="Immagine di copertina">
+
+
         </div>
-        <div class="col">
-            <h3>@Model.NomeScarpa</h3>
-            <p>@Model.Descrizione</p>
-            <p>@Model.Prezzo</p>
+        <div class="col-9">
+            
+
+        <p>Descrizione: <span class="fw-semibold">@Model.Scarpa.Descrizione</span></p>
+
+
         </div>
-    </div>  
+    </div>
+
+</div>
+
+
+
+
+
+<h3>Altre immagini:</h3>
+@foreach (var immagine in Model.ListaImmagini)
+{
+    <img src="@immagine.PercorsoImmagine" alt="Immagine del prodotto">
+}
 

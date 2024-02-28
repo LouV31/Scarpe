@@ -49,45 +49,59 @@ namespace Scarpe.Controllers
 
         public ActionResult Dettagli(int id)
         {
-            string connection = ConfigurationManager.ConnectionStrings["ScarpeDB"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connection);
-            Dettagli dettagli = new Dettagli();
-            List<Dettagli> listaImmagini = new List<Dettagli>();
 
+            string conection = ConfigurationManager.ConnectionStrings["ScarpeDB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(conection);
+            List<ImmagineArticolo> listaImmagini = new List<ImmagineArticolo>();
+            Scarpa scarpa = null;
             try
             {
                 conn.Open();
-                string query = "SELECT A.NomeScarpa, A.Descrizione, I.PercorsoImmagine FROM Articoli AS A INNER JOIN ImmaginiArticoli AS I ON A.idScarpa = I.FK_IdScarpa WHERE A.idScarpa = @id";
+                string query = "SELECT PercorsoImmagine FROM ImmaginiArticoli WHERE FK_IdScarpa = @id";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@id", id);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    string nomeScarpa = reader["NomeScarpa"].ToString();
-                    string descrizione = reader["Descrizione"].ToString();
-                    //string percorsoImmagine = reader["PercorsoImmagine"].ToString();
-                    string immagineCopertina = reader["ImmagineCopertina"].ToString();
-
-                    dettagli = new Dettagli
-                    {
-                        NomeScarpa = nomeScarpa,
-                        Descrizione = descrizione,
-                        ImmagineCopertina = immagineCopertina
-                    };
-
+                    listaImmagini.Add(new ImmagineArticolo { PercorsoImmagine = reader["PercorsoImmagine"].ToString() });
+                }
+                reader.Close();
+                string query2 = "SELECT * FROM Articoli WHERE idScarpa = @id";
+                SqlCommand cmd2 = new SqlCommand(query2, conn);
+                cmd2.Parameters.AddWithValue("@id", id);
+                SqlDataReader reader2 = cmd2.ExecuteReader();
+                if (reader2.Read())
+                {
+                    scarpa = new Scarpa(
+                       reader2["NomeScarpa"].ToString(),
+                       reader2["Descrizione"].ToString(),
+                       reader2["ImmagineCopertina"].ToString()
+                       );
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 Response.Write("Error: ");
-                Response.Write(e);
+                Response.Write(ex);
             }
             finally
             {
                 conn.Close();
             }
 
-            return View(dettagli);
+            if (scarpa == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            DettagliModelView model = new DettagliModelView
+            {
+                Scarpa = scarpa,
+                ListaImmagini = listaImmagini
+            };
+
+            return View(model);
+
         }
 
 

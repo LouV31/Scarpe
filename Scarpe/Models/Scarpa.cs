@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
 
 namespace Scarpe.Models
 {
@@ -11,8 +12,10 @@ namespace Scarpe.Models
         public string ImmagineCopertina { get; set; }
         public decimal Prezzo { get; set; }
         public bool Attivo { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase FileImmagine { get; set; }
 
-        public List<Dettagli> dettagli { get; set; }
+
 
         public Scarpa(int idScarpa, string nomeScarpa, string descrizione, string immagineCopertina, decimal prezzo, bool attivo)
         {
@@ -27,5 +30,13 @@ namespace Scarpe.Models
         public Scarpa()
         {
         }
+        public Scarpa(string nomeScarpa, string descrizione, string immagineCopertina)
+        {
+            NomeScarpa = nomeScarpa;
+            Descrizione = descrizione;
+            ImmagineCopertina = immagineCopertina;
+
+        }
+
     }
 }
