@@ -186,7 +186,90 @@ namespace Scarpe.Controllers
             return RedirectToAction("Admin");
         }
 
+        [HttpPost]
+        public ActionResult DisattivaScarpa(int id)
+        {
+            if (Session["Utente"] != null)
+            {
+                Utente utente = (Utente)Session["Utente"];
+                if (utente.isAdmin)
+                {
+                    string connection = ConfigurationManager
+                        .ConnectionStrings["ScarpeDB"]
+                        .ConnectionString.ToString();
+                    SqlConnection conn = new SqlConnection(connection);
+                    try
+                    {
+                        conn.Open();
+                        string query = "UPDATE Articoli SET Attivo = 0 WHERE idScarpa = @id";
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Response.Write("Error: ");
+                        Response.Write(e);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                    return RedirectToAction("Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Utente");
+            }
 
+        }
+
+        [HttpPost]
+        public ActionResult AttivaScarpa(int id)
+        {
+            if (Session["Utente"] != null)
+            {
+                Utente utente = (Utente)Session["Utente"];
+                if (utente.isAdmin)
+                {
+                    string connection = ConfigurationManager
+                        .ConnectionStrings["ScarpeDB"]
+                        .ConnectionString.ToString();
+                    SqlConnection conn = new SqlConnection(connection);
+                    try
+                    {
+                        conn.Open();
+                        string query = "UPDATE Articoli SET Attivo = 1 WHERE idScarpa = @id";
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Response.Write("Error: ");
+                        Response.Write(e);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                    return RedirectToAction("Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Utente");
+            }
+        }
 
         public ActionResult ModificaScarpa(int idScarpa)
         {
@@ -229,6 +312,63 @@ namespace Scarpe.Controllers
                         conn.Close();
                     }
                     return View(scarpa);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Utente");
+            }
+        }
+
+        public ActionResult ConfermaModificaScarpa(Scarpa scarpa)
+        {
+            if (Session["Utente"] != null)
+            {
+                Utente utente = (Utente)Session["Utente"];
+                if (utente.isAdmin)
+                {
+
+                    if (scarpa.FileImmagine != null && scarpa.FileImmagine.ContentLength > 0)
+                    {
+
+                        string fileName = System.IO.Path.GetFileName(scarpa.FileImmagine.FileName);
+                        string path = System.IO.Path.Combine(Server.MapPath("~/Content/img/"), fileName);
+                        scarpa.FileImmagine.SaveAs(path);
+                        scarpa.ImmagineCopertina = "/Content/img/" + fileName;
+
+
+                    }
+                    string connection = ConfigurationManager
+                        .ConnectionStrings["ScarpeDB"]
+                        .ConnectionString.ToString();
+                    SqlConnection conn = new SqlConnection(connection);
+                    try
+                    {
+                        conn.Open();
+                        string query = "UPDATE Articoli SET NomeScarpa = @NomeScarpa, Descrizione = @Descrizione, Prezzo = @Prezzo, Attivo = @Attivo, ImmagineCopertina = @ImmagineCopertina WHERE idScarpa = @idScarpa";
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@NomeScarpa", scarpa.NomeScarpa);
+                        cmd.Parameters.AddWithValue("@Descrizione", scarpa.Descrizione);
+                        cmd.Parameters.AddWithValue("@Prezzo", Convert.ToDouble(scarpa.Prezzo));
+                        cmd.Parameters.AddWithValue("@Attivo", scarpa.Attivo);
+                        cmd.Parameters.AddWithValue("@idScarpa", scarpa.idScarpa);
+                        cmd.Parameters.AddWithValue("@ImmagineCopertina", scarpa.ImmagineCopertina);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Response.Write("Error: ");
+                        Response.Write(e);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                    return RedirectToAction("Admin");
                 }
                 else
                 {

@@ -25,8 +25,27 @@
                         <p class="mb-0">Prezzo: @scarpa.Prezzo</p>
                     </div>
                     <div>
-                        <a href="@Url.Action("ModificaScarpa", "Utente", new { id = scarpa.idScarpa })" class="btn btn-primary">Modifica</a>
-                        <a href="@Url.Action("Elimina", "Utente", new { id = scarpa.idScarpa })" class="btn btn-danger">Disattiva</a>
+                        <a href="@Url.Action("ModificaScarpa", "Utente", new { idScarpa = scarpa.idScarpa })" class="btn btn-primary">Modifica</a>
+                        @if (scarpa.Attivo)
+                        {
+
+                            using (Html.BeginForm("DisattivaScarpa", "Utente", new { id = scarpa.idScarpa
+                            }, FormMethod.Post))
+                            {
+
+                                <input type="submit" value="Disattiva" class="btn btn-danger" />
+                            }
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("AttivaScarpa", "Utente", new { id = scarpa.idScarpa
+                            }, FormMethod.Post))
+                            {
+
+                                <input type="submit" value="Attiva" class="btn btn-success" />
+                            }
+
+                        }
                     </div>
                 </div>
             </div>
